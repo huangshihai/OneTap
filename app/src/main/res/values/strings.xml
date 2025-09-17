@@ -1,0 +1,123 @@
+<resources>
+  <string name="app_name">"一键通</string>
+
+  <!-- 主界面 -->
+  <string name="home_time_format">HH:mm</string>
+  <string name="home_date_format">yyyy年MM月dd日 EEEE</string>
+  <string name="home_weather_format">%s %d°C</string>
+  <string name="home_settings">设置</string>
+
+  <!-- 联系人 -->
+  <string name="contact_add">添加联系人</string>
+  <string name="contact_edit">编辑</string>
+  <string name="contact_delete">删除</string>
+  <string name="contact_name">姓名</string>
+  <string name="contact_phone">电话</string>
+  <string name="contact_wechat">微信</string>
+  <string name="contact_avatar">头像</string>
+  <string name="contact_change_avatar">更换头像</string>
+  <string name="contact_function_switch">功能开关</string>
+  <string name="contact_video_call">视频通话</string>
+  <string name="contact_voice_call">语音通话</string>
+  <string name="contact_phone_call">打电话</string>
+  <string name="contact_save">保存</string>
+  <string name="contact_cancel">取消</string>
+  <string name="contact_move_up">上移</string>
+  <string name="contact_move_down">下移</string>
+  <string name="contact_pin_top">置顶</string>
+  <string name="contact_management">联系人管理</string>
+  <string name="add_contact">添加联系人</string>
+  <string name="edit_contact">编辑联系人</string>
+  <string name="contact_detail">联系人详情</string>
+  <string name="delete_contact">删除联系人</string>
+  <string name="delete_contact_confirm">确定要删除联系人 "%s" 吗？</string>
+  <string name="no_contacts">暂无联系人</string>
+  <string name="add_first_contact">点击右上角添加第一个联系人</string>
+  <string name="drag_to_sort">拖动排序</string>
+  <string name="tap_to_change_avatar">点击更换头像</string>
+  <string name="tap_to_add_avatar">点击头像添加照片</string>
+  <string name="manual_input">手动输入</string>
+  <string name="from_contacts">从通讯录选择</string>
+  <string name="import_contacts">导入联系人</string>
+  <string name="import_from_system">从系统通讯录导入</string>
+  <string name="importing">正在导入...</string>
+  <string name="import_success">导入成功</string>
+  <string name="import_failed">导入失败</string>
+  <string name="loading_contacts">正在加载联系人...</string>
+  <string name="phone_number">电话号码</string>
+  <string name="wechat_nickname">微信备注</string>
+  <string name="contact_methods">联系方式</string>
+  <string name="wechat_video">微信视频</string>
+  <string name="wechat_voice">微信语音</string>
+  <string name="phone_call">打电话</string>
+  <string name="confirm">确定</string>
+  <string name="cancel">取消</string>
+  <string name="search_contacts">搜索联系人</string>
+  <string name="save">保存</string>
+  <string name="delete">删除</string>
+  <string name="move_up">上移</string>
+  <string name="move_down">下移</string>
+  <string name="edit">编辑</string>
+
+  <!-- 应用设置 -->
+  <string name="app_settings">常用APP设置</string>
+  <string name="app_add">添加APP</string>
+  <string name="app_search">搜索APP</string>
+  <string name="app_all">全部</string>
+  <string name="app_social">社交</string>
+  <string name="app_tools">工具</string>
+  <string name="app_entertainment">娱乐</string>
+  <string name="app_life">生活</string>
+  <string name="app_confirm">确定</string>
+  <string name="scan_apps">扫描应用</string>
+  <string name="scan_apps_confirm">确定要重新扫描已安装的应用吗？</string>
+
+  <!-- 设置 -->
+  <string name="settings">设置</string>
+  <string name="settings_back">返回</string>
+  <string name="voice_settings">语音设置</string>
+  <string name="voice_assistant">语音辅助</string>
+  <string name="voice_feedback">开启语音反馈</string>
+  <string name="voice_speed">语音速度</string>
+  <string name="voice_volume">语音音量</string>
+  <string name="voice_test">测试语音</string>
+  <string name="display_settings">显示设置</string>
+  <string name="font_size">字体大小</string>
+  <string name="font_small">小</string>
+  <string name="font_medium">中</string>
+  <string name="font_large">大</string>
+  <string name="contrast">对比度</string>
+  <string name="contrast_normal">标准</string>
+  <string name="contrast_high">高对比度</string>
+  <string name="theme_settings">主题设置</string>
+  <string name="theme_mode">主题模式</string>
+  <string name="theme_blue">蓝色主题</string>
+  <string name="theme_orange">橙色主题</string>
+  <string name="advanced_settings">高级设置</string>
+  <string name="exit_launcher">退出到系统桌面</string>
+  <string name="auto_start">开机自启动</string>
+  <string name="system_update">系统更新</string>
+  <string name="about_us">关于我们</string>
+  <string name="exit_launcher_confirm">确定要退出到系统桌面吗？</string>
+  
+  <!-- 桌面启动器设置 -->
+  <string name="launcher_settings">桌面启动器设置</string>
+  <string name="default_launcher_status">默认桌面状态</string>
+  <string name="is_default_launcher">当前是默认桌面</string>
+  <string name="not_default_launcher">当前不是默认桌面</string>
+  <string name="set_as_default_launcher">设为默认桌面</string>
+  <string name="exit_launcher_mode">退出桌面启动器</string>
+  <string name="exit_launcher_mode_desc">退出后将恢复系统默认桌面</string>
+  <string name="exit_launcher_confirmation">退出确认</string>
+  <string name="exit_launcher_confirmation_desc">退出桌面启动器时需要确认</string>
+  <string name="show_exit_launcher">显示退出选项</string>
+  <string name="show_exit_launcher_desc">在设置中显示退出桌面启动器选项</string>
+  <string name="exit_launcher_dialog_title">退出桌面启动器</string>
+  <string name="exit_launcher_dialog_message">确定要退出桌面启动器模式吗？\n退出后将恢复到系统默认桌面。</string>
+  <string name="reset_to_system_launcher">恢复系统桌面</string>
+  <string name="open_launcher_settings">打开桌面设置</string>
+  <string name="launcher_utils_error">无法执行操作</string>
+  <string name="no_system_launcher_found">未找到系统默认桌面</string>
+
+  <string name="wx_make_call_service_helper">开启该服务后，可一键拨打微信视频、微信语音。</string>
+</resources>

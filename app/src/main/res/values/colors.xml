@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Common Colors -->
+  <color name="purple_200">#FFBB86FC</color>
+  <color name="purple_500">#FF6200EE</color>
+  <color name="purple_700">#FF3700B3</color>
+  <color name="teal_200">#FF03DAC5</color>
+  <color name="teal_700">#FF018786</color>
+  <color name="black">#FF000000</color>
+  <color name="white">#FFFFFFFF</color>
+  <color name="gray">#808080</color>
+  <color name="light_gray">#F5F5F5</color>
+  <color name="outline">#85736B</color>
+
+  <!-- Primary Colors -->
+  <color name="primary_color">#1E88E5</color>
+  <color name="primary_container">#E3F2FD</color>
+  <color name="on_primary_container">#0D47A1</color>
+
+  <!-- Secondary Colors -->
+  <color name="secondary_color">#77574A</color>
+  <color name="secondary_container">#FFDDD1</color>
+  <color name="on_secondary_container">#2C160C</color>
+
+  <!-- Tertiary Colors -->
+  <color name="tertiary_color">#6C5D2F</color>
+  <color name="tertiary_container">#F5E1A6</color>
+  <color name="on_tertiary_container">#231B00</color>
+
+  <!-- Error Colors -->
+  <color name="error_color">#BA1A1A</color>
+  <color name="error_container">#FFDAD6</color>
+  <color name="on_error_container">#410002</color>
+
+  <!-- Background Colors -->
+  <color name="background">#F0F5FF</color>
+  <color name="on_background">#1F1B16</color>
+  <color name="surface">#FFFBFF</color>
+  <color name="on_surface">#1F1B16</color>
+  <color name="surface_variant">#F4DDD5</color>
+  <color name="on_surface_variant">#52443C</color>
+
+  <!-- App Specific Colors -->
+  <color name="contact_card_background">#FFFFFF</color>
+  <color name="contact_card_border">#EEEEEE</color>
+  <color name="app_item_background">#FFFFFF</color>
+  <color name="settings_item_background">#F8F9FA</color>
+
+  <!-- Button Colors -->
+  <color name="button_primary">#1E88E5</color>
+  <color name="button_secondary">#2196F3</color>
+  <color name="button_success">#4CAF50</color>
+  <color name="button_warning">#FF9800</color>
+  <color name="button_error">#F44336</color>
+
+  <!-- Action Colors -->
+  <color name="action_video_background">#56CC74</color>
+  <color name="action_phone_background">#1875F8</color>
+  <color name="action_voice_background">#FA9A2C</color>
+  <color name="action_cancel_background">#F35258</color>
+
+  <!-- Orange Theme Colors -->
+  <color name="orange_primary">#FF6B35</color>
+  <color name="orange_primary_container">#FFF3E0</color>
+  <color name="orange_on_primary_container">#BF360C</color>
+  <color name="orange_secondary">#E65100</color>
+  <color name="orange_secondary_container">#FFAB91</color>
+  <color name="orange_on_secondary_container">#3E2723</color>
+  <color name="orange_tertiary">#FF8F00</color>
+  <color name="orange_tertiary_container">#FFE082</color>
+  <color name="orange_on_tertiary_container">#4E342E</color>
+
+  <!-- Orange Action Colors -->
+  <color name="orange_action_video_background">#FFF3E0</color>
+  <color name="orange_action_video_text">#E65100</color>
+  <color name="orange_action_phone_background">#E8F5E8</color>
+  <color name="orange_action_phone_text">#388E3C</color>
+  <color name="orange_action_voice_background">#FFF3E0</color>
+  <color name="orange_action_voice_text">#FF6B35</color>
+
+  <!-- High Contrast Mode -->
+  <color name="high_contrast_background">#000000</color>
+  <color name="high_contrast_on_background">#FFFFFF</color>
+  <color name="high_contrast_surface">#000000</color>
+  <color name="high_contrast_on_surface">#FFFFFF</color>
+</resources>

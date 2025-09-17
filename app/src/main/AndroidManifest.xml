@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+  <!-- 权限声明 -->
+  <!-- 电话权限 -->
+  <uses-feature android:name="android.hardware.telephony" android:required="false"/>
+  <uses-permission android:name="android.permission.CALL_PHONE" />
+
+  <!-- 联系人权限 -->
+  <uses-permission android:name="android.permission.READ_CONTACTS" />
+  <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+
+  <!-- 相机权限 -->
+  <uses-feature android:name="android.hardware.camera" android:required="false"/>
+  <uses-permission android:name="android.permission.CAMERA" />
+
+  <!-- 存储权限 -->
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                   android:maxSdkVersion="28" />
+
+  <!-- 悬浮窗权限 -->
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+  <!-- 开机启动权限 -->
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+  <!-- 位置权限（用于天气） -->
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+  <!-- 网络权限 -->
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+  <!-- 震动权限 -->
+  <uses-permission android:name="android.permission.VIBRATE" />
+
+  <!-- 忽略电池优化 -->
+  <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+
+  <!-- 精确闹钟权限（Android 12+） -->
+  <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
+  <!-- 通知权限（Android 13+） -->
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
+  <!-- 应用列表权限 -->
+  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+                   tools:ignore="QueryAllPackagesPermission" />
+  
+  <!-- 小米系统获取应用列表权限 -->
+  <uses-permission android:name="com.android.permission.GET_INSTALLED_APPS" />
+
+  <application
+    android:name=".OneTapApp"
+    android:allowBackup="true"
+    android:dataExtractionRules="@xml/data_extraction_rules"
+    android:fullBackupContent="@xml/backup_rules"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:roundIcon="@mipmap/ic_launcher_round"
+    android:supportsRtl="true"
+    android:theme="@style/Theme.OneTap"
+    tools:targetApi="31">
+
+    <!-- 主Activity - 作为Launcher -->
+    <activity
+            android:name=".ui.activity.MainActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:clearTaskOnLaunch="true"
+            android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi">
+
+      <!-- Launcher Intent Filter -->
+      <intent-filter android:priority="1000">
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.HOME" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
+    <!-- 设置Activity -->
+    <activity
+            android:name=".ui.activity.SettingsActivity"
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
+
+    <!-- 联系人管理Activity -->
+    <activity
+            android:name=".ui.activity.ContactManagementActivity"
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
+
+    <!-- 联系人管理Activity -->
+    <activity
+            android:name=".ui.activity.ContactDetailActivity"
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
+
+    <!-- 应用管理Activity -->
+    <activity
+            android:name=".ui.activity.AppManagementActivity"
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
+
+    <!-- 显示设置Activity -->
+    <activity
+            android:name=".ui.activity.DisplaySettingsActivity"
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
+
+    <!-- 桌面选择器Activity -->
+    <activity
+            android:name=".ui.activity.LauncherChooserActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:excludeFromRecents="true"
+            android:noHistory="true"/>
+
+    <!-- 提供者用于获取已安装应用列表 -->
+    <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+      <meta-data
+              android:name="android.support.FILE_PROVIDER_PATHS"
+              android:resource="@xml/file_paths" />
+    </provider>
+
+    <service android:name=".service.wechat.WeChatAccessibility"
+      android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="false">
+      <intent-filter>
+        <action android:name="android.accessibilityservice.AccessibilityService" />
+      </intent-filter>
+      <meta-data android:name="android.accessibilityservice" android:resource="@xml/accessibility_service_wechat" />
+    </service>
+  </application>
+
+</manifest>
