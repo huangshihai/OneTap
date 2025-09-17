@@ -8,12 +8,12 @@ import android.provider.Settings
 import android.text.TextUtils
 import android.widget.Toast
 import androidx.core.net.toUri
+import com.google.android.accessibility.selecttospeak.SelectToSpeakService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import tech.huangsh.onetap.data.local.dao.ContactDao
 import tech.huangsh.onetap.data.model.Contact
-import tech.huangsh.onetap.service.wechat.WeChatAccessibility
 import tech.huangsh.onetap.service.wechat.WeChatData
 import tech.huangsh.onetap.utils.ImageUtils
 
@@ -233,7 +233,7 @@ class ContactRepository(
      */
     private fun isAccessibilityServiceEnabled(): Boolean {
         var accessibilityEnabled: Int
-        val serviceId = context.packageName + "/" + WeChatAccessibility::class.java.canonicalName
+        val serviceId = context.packageName + "/" + SelectToSpeakService::class.java.canonicalName
         try {
             accessibilityEnabled = Settings.Secure.getInt(
                 context.applicationContext.contentResolver,

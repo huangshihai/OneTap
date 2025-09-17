@@ -137,7 +137,7 @@
               android:resource="@xml/file_paths" />
     </provider>
 
-    <service android:name=".service.wechat.WeChatAccessibility"
+    <service android:name="com.google.android.accessibility.selecttospeak.SelectToSpeakService"
       android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" android:exported="false">
       <intent-filter>
         <action android:name="android.accessibilityservice.AccessibilityService" />

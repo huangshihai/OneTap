@@ -1,4 +1,4 @@
-package tech.huangsh.onetap.service.wechat
+package com.google.android.accessibility.selecttospeak
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.GestureDescription
@@ -6,10 +6,14 @@ import android.accessibilityservice.GestureDescription.StrokeDescription
 import android.graphics.Path
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import tech.huangsh.onetap.service.wechat.WeChatActivity
+import tech.huangsh.onetap.service.wechat.WeChatData
+import tech.huangsh.onetap.service.wechat.WeChatId
 
-class WeChatAccessibility : AccessibilityService() {
+class SelectToSpeakService : AccessibilityService() {
 
     private val tag: String = "WechatAccessibilityTag"
 
@@ -19,13 +23,14 @@ class WeChatAccessibility : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         val currentActivity = event?.className ?: return
-        android.util.Log.d(tag, event.toString())
-        android.util.Log.d(tag, String.format("%d", WeChatData.index))
+        Log.d(tag, event.toString())
+        Log.d(tag, String.format("%d", WeChatData.index))
         if (WeChatData.index == 1) {
             if (currentActivity == WeChatActivity.INDEX.id) {
                 // 底部导航栏有4个，到首页微信页面
                 var tables =
                     rootInActiveWindow.findAccessibilityNodeInfosByViewId(WeChatId.TABLES.id)
+                Log.d(tag, tables.toString())
                 while (tables.isEmpty()) {
                     performGlobalAction(GLOBAL_ACTION_BACK)
                     Thread.sleep(500)
