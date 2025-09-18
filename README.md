@@ -176,7 +176,7 @@ cd OneTap
 
 本项目采用 [MIT License](LICENSE) 开源协议。
 
-## 🙏 Thanks
+## 🙏 致谢
 
 - [wechat_video_call](https://github.com/davidche1116/wechat_video_call)
 - [微信控件混淆导致节点无法识别解决方案](https://zhuanlan.zhihu.com/p/1898312642701026938)
