@@ -69,7 +69,7 @@
             android:name=".ui.activity.MainActivity"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="user"
             android:stateNotNeeded="true"
             android:clearTaskOnLaunch="true"
             android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi">
@@ -87,35 +87,35 @@
     <activity
             android:name=".ui.activity.SettingsActivity"
             android:exported="false"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="user"
             android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
 
     <!-- 联系人管理Activity -->
     <activity
             android:name=".ui.activity.ContactManagementActivity"
             android:exported="false"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="user"
             android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
 
-    <!-- 联系人管理Activity -->
+    <!-- 联系人详情Activity -->
     <activity
             android:name=".ui.activity.ContactDetailActivity"
             android:exported="false"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="user"
             android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
 
     <!-- 应用管理Activity -->
     <activity
             android:name=".ui.activity.AppManagementActivity"
             android:exported="false"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="user"
             android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
 
     <!-- 显示设置Activity -->
     <activity
             android:name=".ui.activity.DisplaySettingsActivity"
             android:exported="false"
-            android:screenOrientation="fullSensor"
+            android:screenOrientation="user"
             android:theme="@style/Theme.OneTap" tools:ignore="DiscouragedApi"/>
 
     <!-- 桌面选择器Activity -->

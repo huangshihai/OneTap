@@ -2,8 +2,8 @@ package tech.huangsh.onetap.ui.screens.app
 
 import android.Manifest
 import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import com.hjq.permissions.XXPermissions
+import com.hjq.permissions.OnPermissionCallback
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.filled.Apps
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import tech.huangsh.onetap.data.model.AppInfo
 import tech.huangsh.onetap.ui.screens.components.CommonTopBar
 import tech.huangsh.onetap.utils.ImageUtils
@@ -108,31 +110,60 @@ fun AppManagementScreen(
     var showMiuiPermissionDialog by remember { mutableStateOf(false) }
     var searchQuery by remember { mutableStateOf("") }
     val context = LocalContext.current
-    val lifecycleOwner = LocalLifecycleOwner.current
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
 
-    // 标准权限请求启动器
-    val standardPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        viewModel.checkPermission()
-        if (isGranted && availableApps.isEmpty()) {
-            viewModel.loadAvailableApps()
+    // 使用XXPermissions申请权限的函数
+    fun requestAppListPermission() {
+        val permissions = mutableListOf<String>()
+        
+        when {
+            // 小米系统需要申请GET_INSTALLED_APPS权限
+            viewModel.isMiuiSystem() -> {
+                permissions.add("com.android.permission.GET_INSTALLED_APPS")
+            }
+            // Android 11+需要申请QUERY_ALL_PACKAGES权限
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
+                permissions.add(Manifest.permission.QUERY_ALL_PACKAGES)
+            }
         }
-    }
-
-    // 小米权限请求启动器
-    val miuiPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        viewModel.checkPermission()
-        if (isGranted && availableApps.isEmpty()) {
-            viewModel.loadAvailableApps()
+        
+        if (permissions.isNotEmpty()) {
+            XXPermissions.with(context as androidx.activity.ComponentActivity)
+                .permission(permissions)
+                .request(object : OnPermissionCallback {
+                    override fun onGranted(permissions: MutableList<String>, allGranted: Boolean) {
+                        if (allGranted) {
+                            // 权限申请成功，更新权限状态并智能加载应用列表
+                            viewModel.checkPermission()
+                            viewModel.loadAvailableAppsIfNeeded()
+                        }
+                    }
+                    
+                    override fun onDenied(permissions: MutableList<String>, doNotAskAgain: Boolean) {
+                        if (doNotAskAgain) {
+                            // 权限被永久拒绝，显示小米权限对话框指导用户手动设置
+                            if (viewModel.isMiuiSystem()) {
+                                showMiuiPermissionDialog = true
+                            }
+                        }
+                    }
+                })
+        } else {
+            // Android 11以下无需额外权限，直接加载应用列表
+            viewModel.loadAvailableAppsIfNeeded()
         }
     }
     
-    // 检查权限状态
+    // 进入页面时主动检查权限并申请
     LaunchedEffect(Unit) {
         viewModel.checkPermission()
+        // 如果没有权限，直接申请权限
+        if (!viewModel.hasPermission.value) {
+            requestAppListPermission()
+        } else {
+            // 有权限的情况下，检查并加载应用列表
+            viewModel.loadAvailableAppsIfNeeded()
+        }
     }
     
     // 监听应用生命周期，当用户从设置页面返回时重新检查权限
@@ -140,6 +171,10 @@ fun AppManagementScreen(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 viewModel.checkPermission()
+                // 如果用户从设置页面返回且获得了权限，智能加载应用列表
+                if (viewModel.hasPermission.value) {
+                    viewModel.loadAvailableAppsIfNeeded()
+                }
             }
         }
         lifecycleOwner.lifecycle.addObserver(observer)
@@ -148,25 +183,11 @@ fun AppManagementScreen(
         }
     }
     
-    // 监听权限状态变化
+    // 监听权限状态变化，权限获得后立即加载应用
     LaunchedEffect(hasPermission) {
-        if (hasPermission && availableApps.isEmpty()) {
-            viewModel.loadAvailableApps()
-        } else if (!hasPermission) {
-            when {
-                // 小米系统支持动态权限申请
-                viewModel.needsDynamicPermissionRequest() -> {
-                    miuiPermissionLauncher.launch("com.android.permission.GET_INSTALLED_APPS")
-                }
-                // 小米系统需要手动设置权限
-                viewModel.needsManualPermissionSetting() -> {
-                    showMiuiPermissionDialog = true
-                }
-                // 其他系统Android 11+使用标准权限请求
-                Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-                    standardPermissionLauncher.launch(Manifest.permission.QUERY_ALL_PACKAGES)
-                }
-            }
+        if (hasPermission) {
+            // 权限获得后，检查并加载应用列表
+            viewModel.loadAvailableAppsIfNeeded()
         }
     }
     
@@ -186,20 +207,7 @@ fun AppManagementScreen(
                             if (hasPermission) {
                                 viewModel.refreshApps()
                             } else {
-                                when {
-                                    // 小米系统支持动态权限申请
-                                    viewModel.needsDynamicPermissionRequest() -> {
-                                        miuiPermissionLauncher.launch("com.android.permission.GET_INSTALLED_APPS")
-                                    }
-                                    // 小米系统需要手动设置权限
-                                    viewModel.needsManualPermissionSetting() -> {
-                                        showMiuiPermissionDialog = true
-                                    }
-                                    // 其他系统Android 11+使用标准权限请求
-                                    Build.VERSION.SDK_INT >= Build.VERSION_CODES.R -> {
-                                        standardPermissionLauncher.launch(Manifest.permission.QUERY_ALL_PACKAGES)
-                                    }
-                                }
+                                requestAppListPermission()
                             }
                         }
                     },
@@ -369,31 +377,31 @@ fun AppManagementScreen(
             },
             title = { 
                 Text(
-                    text = "需要应用列表权限",
+                    text = stringResource(R.string.miui_permission_required),
                     style = MaterialTheme.typography.headlineSmall
                 ) 
             },
             text = { 
                 Column {
                     Text(
-                        text = "检测到您使用的是小米手机，需要手动开启\"获取应用列表\"权限。",
+                        text = stringResource(R.string.miui_permission_explanation),
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "根据《移动智能终端安全能力技术要求》，小米系统需要用户主动授权才能获取应用列表。",
+                        text = stringResource(R.string.miui_permission_reason),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
-                        text = "操作步骤：",
+                        text = stringResource(R.string.operation_steps),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold
                     )
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "1. 点击\"去设置\"打开权限管理\n2. 找到\"其他权限\"或\"特殊权限\"\n3. 开启\"获取应用列表\"权限",
+                        text = stringResource(R.string.miui_steps),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -414,14 +422,14 @@ fun AppManagementScreen(
                         }
                     }
                 ) {
-                    Text("去设置")
+                    Text(stringResource(R.string.go_to_settings))
                 }
             },
             dismissButton = {
                 TextButton(
                     onClick = { showMiuiPermissionDialog = false }
                 ) {
-                    Text("取消")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )

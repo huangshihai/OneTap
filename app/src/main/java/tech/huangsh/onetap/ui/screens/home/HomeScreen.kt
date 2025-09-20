@@ -3,8 +3,8 @@ package tech.huangsh.onetap.ui.screens.home
 import android.Manifest
 import android.content.Intent
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import com.hjq.permissions.XXPermissions
+import com.hjq.permissions.OnPermissionCallback
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,7 +34,6 @@ import tech.huangsh.onetap.ui.screens.components.ContactActionBottomSheet
 import tech.huangsh.onetap.ui.screens.components.ContactItem
 import tech.huangsh.onetap.ui.theme.OneTapTheme
 import tech.huangsh.onetap.utils.ImageUtils
-import tech.huangsh.onetap.utils.PermissionUtils
 import tech.huangsh.onetap.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,25 +50,30 @@ fun HomeScreen(viewModel: MainViewModel) {
     val showBottomSheet by viewModel.showBottomSheet.collectAsState()
     val selectedContact by viewModel.selectedContact.collectAsState()
     
-    // 用于存储待拨打的电话号码
-    var pendingPhoneCall by remember { mutableStateOf<String?>(null) }
-    
-    // 权限请求启动器
-    val phonePermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // 权限已授予，执行打电话
-            pendingPhoneCall?.let { phone ->
-                val intent = viewModel.makePhoneCall(phone)
-                intent?.let { context.startActivity(it) }
-                pendingPhoneCall = null
-            }
-        } else {
-            // 权限被拒绝，显示提示
-            Toast.makeText(context, "需要电话权限才能拨打电话", Toast.LENGTH_SHORT).show()
-            pendingPhoneCall = null
-        }
+    // 使用XXPermissions申请电话权限并拨打电话
+    fun requestPhonePermissionAndCall(phoneNumber: String) {
+        XXPermissions.with(context as androidx.activity.ComponentActivity)
+            .permission(Manifest.permission.CALL_PHONE)
+            .request(object : OnPermissionCallback {
+                override fun onGranted(permissions: MutableList<String>, allGranted: Boolean) {
+                    if (allGranted) {
+                        // 权限已授予，执行打电话
+                        val intent = viewModel.makePhoneCall(phoneNumber)
+                        intent?.let { context.startActivity(it) }
+                    }
+                }
+                
+                override fun onDenied(permissions: MutableList<String>, doNotAskAgain: Boolean) {
+                    // 权限被拒绝，显示提示
+                    if (doNotAskAgain) {
+                        Toast.makeText(context, "请在设置中开启电话权限才能拨打电话", Toast.LENGTH_LONG).show()
+                        // 可以引导用户到设置页面
+                        XXPermissions.startPermissionActivity(context, permissions)
+                    } else {
+                        Toast.makeText(context, "需要电话权限才能拨打电话", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
     }
 
     Scaffold(
@@ -187,16 +191,8 @@ fun HomeScreen(viewModel: MainViewModel) {
                     viewModel.hideBottomSheet()
                 },
                 onPhoneCall = { phone ->
-                    // 检查电话权限
-                    if (PermissionUtils.hasPermission(context, Manifest.permission.CALL_PHONE)) {
-                        // 已有权限，直接拨打电话
-                        val intent = viewModel.makePhoneCall(phone)
-                        intent?.let { context.startActivity(it) }
-                    } else {
-                        // 没有权限，先请求权限
-                        pendingPhoneCall = phone
-                        phonePermissionLauncher.launch(Manifest.permission.CALL_PHONE)
-                    }
+                    // 使用XXPermissions申请电话权限并拨打电话
+                    requestPhonePermissionAndCall(phone)
                     viewModel.hideBottomSheet()
                 },
                 onCancelCall = {

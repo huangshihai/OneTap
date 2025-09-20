@@ -71,6 +71,19 @@
   <string name="app_confirm">确定</string>
   <string name="scan_apps">扫描应用</string>
   <string name="scan_apps_confirm">确定要重新扫描已安装的应用吗？</string>
+  <string name="permission_required">需要获取应用列表权限</string>
+  <string name="permission_explanation">为了显示您设备上已安装的应用，我们需要获取应用列表权限。</string>
+  <string name="permission_usage">此权限将用于：</string>
+  <string name="permission_features">• 扫描并显示您已安装的应用\n• 让您选择常用的应用添加到主页\n• 提供更便捷的应用管理功能</string>
+  <string name="permission_privacy">我们承诺不会收集或上传您的应用信息，所有数据仅在本地使用。</string>
+  <string name="grant_permission">授予权限</string>
+  <string name="later">稍后再说</string>
+  <string name="miui_permission_required">需要应用列表权限</string>
+  <string name="miui_permission_explanation">检测到您使用的是小米手机，需要手动开启"获取应用列表"权限。</string>
+  <string name="miui_permission_reason">根据《移动智能终端安全能力技术要求》，小米系统需要用户主动授权才能获取应用列表。</string>
+  <string name="operation_steps">操作步骤：</string>
+  <string name="miui_steps">1. 点击"去设置"打开权限管理\n2. 找到"其他权限"或"特殊权限"\n3. 开启"获取应用列表"权限</string>
+  <string name="go_to_settings">去设置</string>
 
   <!-- 设置 -->
   <string name="settings">设置</string>

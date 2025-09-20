@@ -32,7 +32,8 @@ import androidx.core.graphics.drawable.toBitmap
 import coil.compose.AsyncImage
 import tech.huangsh.onetap.R
 import tech.huangsh.onetap.data.model.Contact
-import tech.huangsh.onetap.utils.PermissionUtils
+import com.hjq.permissions.XXPermissions
+import com.hjq.permissions.OnPermissionCallback
 import tech.huangsh.onetap.utils.rememberCameraAppIcon
 import tech.huangsh.onetap.utils.rememberGalleryAppIcon
 import java.io.File
@@ -94,23 +95,6 @@ fun ContactDetailScreen(
         }
     }
     
-    // 相机权限请求启动器
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // 权限已授予，启动相机
-            val photoFile = File(context.externalCacheDir, "temp_avatar_${System.currentTimeMillis()}.jpg")
-            tempCameraUri = FileProvider.getUriForFile(
-                context,
-                "${context.packageName}.fileprovider",
-                photoFile
-            )
-            cameraLauncher.launch(tempCameraUri!!)
-        } else {
-            Toast.makeText(context, "需要相机权限才能拍照", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     Scaffold(
         topBar = {
@@ -408,20 +392,30 @@ fun ContactDetailScreen(
             },
             onCameraClick = {
                 showAvatarPickerBottomSheet = false
-                // 检查相机权限
-                if (PermissionUtils.hasPermission(context, Manifest.permission.CAMERA)) {
-                    // 已有权限，直接启动相机
-                    val photoFile = File(context.externalCacheDir, "temp_avatar_${System.currentTimeMillis()}.jpg")
-                    tempCameraUri = FileProvider.getUriForFile(
-                        context,
-                        "${context.packageName}.fileprovider",
-                        photoFile
-                    )
-                    cameraLauncher.launch(tempCameraUri!!)
-                } else {
-                    // 没有权限，请求权限
-                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-                }
+                // 使用XXPermissions请求相机权限并启动相机
+                XXPermissions.with(context as androidx.activity.ComponentActivity)
+                    .permission(Manifest.permission.CAMERA)
+                    .request(object : OnPermissionCallback {
+                        override fun onGranted(permissions: MutableList<String>, allGranted: Boolean) {
+                            if (allGranted) {
+                                // 已有权限，直接启动相机
+                                val photoFile = File(context.externalCacheDir, "temp_avatar_${System.currentTimeMillis()}.jpg")
+                                tempCameraUri = FileProvider.getUriForFile(
+                                    context,
+                                    "${context.packageName}.fileprovider",
+                                    photoFile
+                                )
+                                cameraLauncher.launch(tempCameraUri!!)
+                            }
+                        }
+                        
+                        override fun onDenied(permissions: MutableList<String>, doNotAskAgain: Boolean) {
+                            if (doNotAskAgain) {
+                                // 权限被永久拒绝，引导用户到设置页面
+                                XXPermissions.startPermissionActivity(context, permissions)
+                            }
+                        }
+                    })
             }
         )
     }

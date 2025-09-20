@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Apps
 import androidx.compose.material.icons.filled.DisplaySettings
@@ -210,7 +211,7 @@ fun LauncherSettingsSection(settingsViewModel: SettingsViewModel) {
         // 退出桌面启动器
         if (isDefaultLauncher) {
             SettingsItemWithDescription(
-                icon = Icons.Default.ExitToApp,
+                icon = Icons.AutoMirrored.Filled.ExitToApp,
                 title = stringResource(R.string.exit_launcher_mode),
                 description = stringResource(R.string.exit_launcher_mode_desc),
                 onClick = {

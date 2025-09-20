@@ -67,7 +67,6 @@ class MainViewModel @Inject constructor(
     
     init {
         updateTime()
-        scanAppsIfNeeded()
         // 启动时更新天气
         updateWeather()
 
@@ -94,18 +93,6 @@ class MainViewModel @Inject constructor(
                 _currentLunarDate.value = DateUtils.getLunar(now)
 
                 delay(1000)
-            }
-        }
-    }
-    
-    /**
-     * 扫描应用（如果需要）
-     */
-    private fun scanAppsIfNeeded() {
-        viewModelScope.launch {
-            val appCount = appRepository.getEnabledAppCount().first()
-            if (appCount == 0) {
-                appRepository.scanInstalledApps()
             }
         }
     }

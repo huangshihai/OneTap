@@ -1,8 +1,8 @@
 package tech.huangsh.onetap.ui.screens.contact
 
 import android.Manifest
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import com.hjq.permissions.XXPermissions
+import com.hjq.permissions.OnPermissionCallback
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
@@ -74,18 +74,26 @@ fun ContactManagementScreen(
         }
     }
 
-    // 权限请求启动器
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            // 权限已授予，可以访问通讯录
-        }
-    }
-
+    // 使用XXPermissions请求联系人权限
     LaunchedEffect(Unit) {
-        // 请求联系人权限
-        requestPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
+        XXPermissions.with(context as androidx.activity.ComponentActivity)
+            .permission(Manifest.permission.READ_CONTACTS)
+            .request(object : OnPermissionCallback {
+                override fun onGranted(permissions: MutableList<String>, allGranted: Boolean) {
+                    if (allGranted) {
+                        // 权限已授予，可以访问通讯录
+                        // 这里可以添加权限获得后的处理逻辑
+                    }
+                }
+                
+                override fun onDenied(permissions: MutableList<String>, doNotAskAgain: Boolean) {
+                    // 权限被拒绝的处理
+                    if (doNotAskAgain) {
+                        // 权限被永久拒绝，引导用户到设置页面
+                        XXPermissions.startPermissionActivity(context, permissions)
+                    }
+                }
+            })
     }
 
         // 显示导入联系人底部弹出框时加载系统联系人

@@ -68,6 +68,48 @@ class AppViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 权限获得后扫描应用
+     */
+    fun scanAppsAfterPermissionGranted() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                // 扫描已安装应用
+                appRepository.scanInstalledApps()
+                // 加载可用应用列表
+                loadAvailableApps()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    /**
+     * 智能加载应用列表（有缓存时不重新扫描）
+     */
+    fun loadAvailableAppsIfNeeded() {
+        viewModelScope.launch {
+            // 如果当前应用列表为空，则尝试从数据库加载
+            if (_availableApps.value.isEmpty()) {
+                val cachedApps = appRepository.getCachedApps()
+                if (cachedApps.isNotEmpty()) {
+                    // 数据库中有缓存，直接使用
+                    _availableApps.value = cachedApps
+                } else {
+                    // 数据库为空，需要扫描应用
+                    _isLoading.value = true
+                    try {
+                        appRepository.scanInstalledApps()
+                        loadAvailableApps()
+                    } finally {
+                        _isLoading.value = false
+                    }
+                }
+            }
+        }
+    }
     
     /**
      * 启用应用
@@ -127,6 +169,13 @@ class AppViewModel @Inject constructor(
      */
     fun isMiuiSupportDynamicPermission(): Boolean {
         return appRepository.isMiuiSupportDynamicPermission()
+    }
+
+    /**
+     * 检查是否为小米系统
+     */
+    fun isMiuiSystem(): Boolean {
+        return appRepository.isMiuiSystem()
     }
 
     /**

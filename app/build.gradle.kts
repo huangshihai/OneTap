@@ -98,8 +98,10 @@ dependencies {
     implementation(libs.kotlinx.coroutines.play.services)
 
     // Accompanist
-    implementation(libs.accompanist.permissions)
     implementation(libs.accompanist.systemuicontroller)
+    
+    // XXPermissions - Android权限框架
+    implementation("com.github.getActivity:XXPermissions:20.0")
 
     // Gson
     implementation(libs.gson)

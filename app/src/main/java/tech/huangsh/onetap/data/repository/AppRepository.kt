@@ -63,6 +63,10 @@ class AppRepository(
         return cachedApps
     }
 
+    suspend fun getCachedApps(): List<AppInfo> {
+        return appInfoDao.getAllAppsList()
+    }
+
     suspend fun moveApp(packageName: String, fromPosition: Int, toPosition: Int) {
         if (fromPosition == toPosition) return
 
